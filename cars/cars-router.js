@@ -1,15 +1,6 @@
 const express = require("express")
 const db = require('../data/config')
 
-// const knex = require("knex")
-
-// const db = knex({
-// 	client: "sqlite3",
-// 	useNullAsDefault: true,
-// 	connection: {
-// 		filename: "./data/produce.db3",
-// 	},
-// })
 
 const router = express.Router()
 
@@ -44,6 +35,28 @@ router.post("/", async (req, res, next) => {
 	} catch(err) {
 		next(err)
 	}
+})//working
+
+router.put("/:id", async (req, res, next) => {
+    try {
+        const carData = req.body
+        await db("cars").where("id", req.params.id).update(carData)
+        const updatedcar = await db("cars").where("id", req.params.id).first()
+        res.json(updatedcar)
+    } catch (err) {
+        next(err)
+    }
+
+})//working
+
+router.delete("/:id", async (req, res, next) => {
+    try {
+        await db("cars").where("id", req.params.id).del()
+        res.status(204).end()
+    } catch (err) {
+        next(err)
+    }
+
 })//working
 
 module.exports = router
